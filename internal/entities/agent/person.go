@@ -18,7 +18,7 @@ type Person struct {
 }
 
 func NewPerson(home t_.Environment, work t_.Environment) *Person {
-	// @todo get capabilities from config?
+	// @todo get capabilities from config file
 	capabilities := getCapabilities()
 	return &Person{
 		i_.NewIdentity(),

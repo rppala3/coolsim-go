@@ -25,7 +25,6 @@ func Intersection(allActions, capabilities []t_.Action) []t_.Action {
 		if _, exists := dict[key]; exists {
 			sequence = append(sequence, action)
 		}
-
 	}
 
 	return sequence
