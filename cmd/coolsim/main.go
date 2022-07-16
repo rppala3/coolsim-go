@@ -1,7 +1,11 @@
 package main
 
 import (
-	agentPkg "coolsim/internal/singletons/agent"
+	s_ "coolsim/internal/commons/spawner"
+	e_ "coolsim/internal/entities/environment"
+	envMgr "coolsim/internal/singletons/environment"
+	ticker "coolsim/internal/ticker"
+	"fmt"
 
 	"go.uber.org/zap"
 )
@@ -9,22 +13,48 @@ import (
 var logger *zap.Logger
 
 func main() {
-	thicks := 2
+	// var routines sync.WaitGroup
+	ticks := 5
+	envs := 1
 
-	InitLogger()
+	fmt.Println("Init")
+	fmt.Println(" - logger")
+	initLogger()
 	defer logger.Sync()
 
-	agentMgr := agentPkg.GetInstance()
-	p01 := agentMgr.SpawnAPerson()
+	fmt.Println(" - environment")
+	spawnEnvironments(envs)
 
-	for i := 0; i < thicks; i++ {
-		p01.Perceive()
-	}
+	// @todo spawn all agents
+
+	fmt.Println("Start simulation")
+
+	eventBroadcast := envMgr.GetInstance().GetBroadcaster()
+	tckr := ticker.NewTicker(ticks, eventBroadcast)
+	tckr.Start()
+	eventBroadcast.Discard()
+
+	envMgr.GetInstance().GetWaitGroup().Wait()
+	fmt.Println("End simulation")
 }
 
+//
+// Private methods
+//
+
 // @see https://developpaper.com/using-zap-log-library-in-go-language-project-translation/
-func InitLogger() {
+func initLogger() {
 	// @todo logger configuration
 	logger, _ = zap.NewProduction()
 	zap.ReplaceGlobals(logger)
+}
+
+func spawnEnvironments(nEnvs int) {
+	ready := make(s_.AckChannel)
+	envMgr := envMgr.GetInstance()
+	for i := 1; i <= nEnvs; i++ {
+		office := envMgr.SpawnAPlace(e_.NewOffice, ready)
+		<-ready
+		fmt.Printf(" * Office %d spawned %s\n", i, office.GetUID())
+	}
 }
