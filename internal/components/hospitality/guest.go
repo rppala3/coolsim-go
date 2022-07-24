@@ -1,6 +1,6 @@
 package hospitality
 
-import i_ "coolsim/internal/commons/identity"
+import i_ "coolsim/internal/components/identity"
 
 type Guest interface {
 	i_.Identifiable

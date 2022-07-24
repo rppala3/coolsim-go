@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/google/uuid v1.3.0
+	github.com/rppala3/broadcasting v0.0.0-20220724110526-037f54bb9168
 	go.uber.org/zap v1.21.0
 )
 

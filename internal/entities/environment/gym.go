@@ -10,12 +10,9 @@ type Gym struct {
 	// state map[string]EnvState // env state map
 }
 
-func NewGym() *Gym {
+func NewGym() t_.Environment {
+	// func NewGym() *Gym {
 	return &Gym{
 		NewPlace(),
 	}
-}
-
-func (location *Gym) GetAPerception() t_.Perception {
-	return nil // @todo
 }
