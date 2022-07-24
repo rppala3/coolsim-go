@@ -1,11 +1,12 @@
 package main
 
 import (
-	s_ "coolsim/internal/commons/spawner"
+	m_ "coolsim/internal/commons/messaging"
 	e_ "coolsim/internal/entities/environment"
 	envMgr "coolsim/internal/singletons/environment"
-	ticker "coolsim/internal/ticker"
+	"coolsim/internal/ticker"
 	"fmt"
+	"time"
 
 	"go.uber.org/zap"
 )
@@ -13,26 +14,29 @@ import (
 var logger *zap.Logger
 
 func main() {
-	// var routines sync.WaitGroup
-	ticks := 5
-	envs := 1
+	delay := time.Nanosecond
+	// delay := time.Second
+	ticks := 10
+	envs := 5
 
 	fmt.Println("Init")
 	fmt.Println(" - logger")
 	initLogger()
 	defer logger.Sync()
 
-	fmt.Println(" - environment")
+	fmt.Println(" - environments")
 	spawnEnvironments(envs)
 
-	// @todo spawn all agents
+	// @todo
+	// fmt.Println(" - agents")
+	// spawnAgents(envs)
 
 	fmt.Println("Start simulation")
 
 	eventBroadcast := envMgr.GetInstance().GetBroadcaster()
-	tckr := ticker.NewTicker(ticks, eventBroadcast)
+	tckr := ticker.NewTicker(ticks, delay, eventBroadcast)
 	tckr.Start()
-	eventBroadcast.Discard()
+	eventBroadcast.Close()
 
 	envMgr.GetInstance().GetWaitGroup().Wait()
 	fmt.Println("End simulation")
@@ -50,7 +54,7 @@ func initLogger() {
 }
 
 func spawnEnvironments(nEnvs int) {
-	ready := make(s_.AckChannel)
+	ready := make(m_.AckChannel)
 	envMgr := envMgr.GetInstance()
 	for i := 1; i <= nEnvs; i++ {
 		office := envMgr.SpawnAPlace(e_.NewOffice, ready)

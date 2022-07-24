@@ -12,16 +12,14 @@ type SandStorm struct {
 }
 
 // @todo receive envState
-// func NewSandStorm() *SandStorm {
-// 	return &SandStorm{
-// 		random.PullOutInt(1, 100),
-// 	}
-// }
-
 func NewSandStorm() t_.Event {
 	return &SandStorm{
-		random.PullOutInt(1, 100),
+		random.Int(1, 100),
 	}
+}
+
+func (event *SandStorm) Name() string {
+	return "Sand Storm"
 }
 
 func (event *SandStorm) Description() string {
