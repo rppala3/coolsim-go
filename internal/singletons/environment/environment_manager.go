@@ -41,7 +41,10 @@ func (manager *EnvironmentManager) GetWaitGroup() *sync.WaitGroup {
 	return &waitGroup
 }
 
-func (manager *EnvironmentManager) SpawnAPlace(envBuilder t_.EnvironmentBuilder, ready m_.AckChannel) t_.Environment {
+func (manager *EnvironmentManager) SpawnAPlace(
+	envBuilder t_.EnvironmentBuilder,
+	ready m_.AckChannel,
+) t_.Environment {
 	place := envBuilder()
 	manager.add(place)
 

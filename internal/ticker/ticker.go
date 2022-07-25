@@ -58,10 +58,7 @@ func (ticker *Ticker) Start() {
 		// Send event
 		ticker.eventBroadcast.Send(event)
 
-		time.Sleep(ticker.delay) // slow down the execution
+		// Slow down the execution
+		time.Sleep(ticker.delay)
 	}
 }
-
-//
-// Private methods
-//
