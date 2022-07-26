@@ -1,7 +1,6 @@
 package agent
 
 import (
-	m_ "coolsim/internal/commons/messaging"
 	t_ "coolsim/internal/types"
 	"sync"
 )
@@ -23,10 +22,11 @@ func GetInstance() *AgentManager {
 	return singleInstance
 }
 
-func (manager *AgentManager) SpawnAnAgent(
-	agentBuilder t_.Agent,
-	ready m_.AckChannel,
-) t_.Agent {
+func (manager *AgentManager) GetAgent(uid string) t_.Agent {
+	return manager.agents[uid]
+}
+
+func (manager *AgentManager) SpawnAnAgent(agentBuilder t_.AgentBuilder) t_.Agent {
 	// envMgr := environment.GetInstance() // @todo should be decoupled
 	// agent := a_.NewPerson(
 	// 	envMgr.SpawnAnHome(),
@@ -37,10 +37,6 @@ func (manager *AgentManager) SpawnAnAgent(
 
 	// @todo
 	return nil
-}
-
-func (manager *AgentManager) Get(uid string) t_.Agent {
-	return manager.agents[uid]
 }
 
 //

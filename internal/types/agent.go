@@ -2,6 +2,8 @@ package types
 
 import i_ "coolsim/internal/components/identity"
 
+type AgentBuilder func() Agent
+
 type Agent interface {
 	i_.Identifiable
 	GetHome() Environment
